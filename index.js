@@ -1,21 +1,27 @@
 const start = document.querySelector(".js-start-btn"),
     inputBox = document.querySelector(".js-input-box"),
-    input = inputBox.querySelector("input");
+    input = inputBox.querySelector("input"),
+    showRestChances = inputBox.querySelector(".tryNumText"),
+    resultText = inputBox.querySelector(".result"),
+    restartBtn = document.querySelector(".restart");
+    
 
+const goalNumber = [];
+let tryLimit = 10;
 
 //START 클릭 시 목표 숫자 배열 생성(세자리)
 function genNumber(){
     const firstNumber = Math.floor(Math.random()*10),
         secondNumber = Math.floor(Math.random()*10),
         thirdNumber = Math.floor(Math.random()*10);
-
-    const goalNumber = [firstNumber, secondNumber, thirdNumber];
+    goalNumber.push(firstNumber, secondNumber, thirdNumber);
 }
 
 function handleClickStart(event){
     const btn = event.target;
     btn.classList.add("no-show");
     inputBox.classList.remove("no-show");
+    showRestChances.innerText = `Baseball Game을 통해 숫자를 맞춰 보세요!(숫자 세자리)`;
     genNumber();
 }
 
@@ -24,21 +30,59 @@ function handleSubmit(event){
     const form = event.target;
     const input = form.querySelector("input");
     const userAnswer = input.value;
-    //입력값이 세자리 초과일때
-    if(userAnswer.length > 3){
-        alert(`숫자 세 자리를 입력해주세요.`)
+    //입력값이 세자리가 아닐때
+    if(userAnswer.length > 3 || userAnswer.length < 3){
+        alert(`숫자는 세 자리를 입력해주세요.`)
+        tryLimit += 1;
+    }
+    comparing(userAnswer);
+}
+
+function comparing(userText){
+    let countStrike = 0; 
+    let countBall = 0;
+    for(i=0; i<3; i++){
+        //Index 순서, 값 같을 경우 - count STRIKE +1
+        console.log(goalNumber[i], parseInt(userText[i]))
+        if(goalNumber[i] === parseInt(userText[i])){
+            countStrike += 1;
+            //index 순서 다른것들 중 값은 목표 숫자배열에 포함된 경우 - count BALL +1
+        }   else if(goalNumber.indexOf(parseInt(userText[i])) !== -1){
+            countBall += 1;
+        }
+    }
+    tryLimit -= 1;
+    //스트라이크 & 볼 결과 표기
+    if(countStrike === 3){
+        input.value = "";
+        resultText.innerText=`${countStrike} STRIKE! OUT!! You Won! 남은 횟수: ${tryLimit}`;    
+    }   else{
+        input.value = "";
+        resultText.innerText=`${countStrike} STRIKE, ${countBall} BALL!  남은 횟수: ${tryLimit}`;
+    }
+    //남은횟수:0 - 재시작 버튼 표시
+    if(tryLimit === 0){
+        inputBox.classList.add("no-show");
+        restartBtn.innerText = `You Lost. Retry it again!`;
+        restartBtn.classList.remove("no-show");
     }
     
     
-    console.log(userAnswer)
-    
 }
 
-
+function handleClickRestart(){
+    inputBox.classList.remove("no-show");
+    restartBtn.classList.add("no-show");
+    showRestChances.innerText = `Baseball Game을 통해 숫자를 맞춰 보세요!(숫자 세자리)`;
+    tryLimit = 10;
+    resultText.innerText="";
+    genNumber();
+}
 
 function init (){
     start.addEventListener("click", handleClickStart);
     inputBox.addEventListener("submit", handleSubmit);
+    restartBtn.addEventListener("click", handleClickRestart);
 }
 
 init();
