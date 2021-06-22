@@ -44,6 +44,7 @@ function handleSubmit(event){
 function comparing(userText){
     let countStrike = 0; 
     let countBall = 0;
+    
     for(i=0; i<3; i++){
         //Index 순서, 값 같을 경우 - count STRIKE +1
         console.log(goalNumber[i], parseInt(userText[i]))
@@ -55,6 +56,7 @@ function comparing(userText){
         }
     }
     tryLimit -= 1;
+    
     //스트라이크 & 볼 결과 표기
     if(countStrike === 3){
         input.value = "";
