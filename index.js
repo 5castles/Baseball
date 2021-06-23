@@ -10,6 +10,7 @@ const start = document.querySelector(".js-start-btn"),
     
 
 let goalNumber = [];
+//도전가능 횟수 설정
 let tryLimit = 10;
 
 //START 클릭 시 목표 숫자 배열 생성(세자리)
@@ -70,7 +71,7 @@ function comparing(userText){
         resultText.innerText= `${countStrike} STRIKE, ${countBall} BALL!`;  
         restChances.innerText= `남은 횟수: ${tryLimit}`;
     }
-    //남은횟수:0 - 재시작 버튼 표시
+    //남은횟수:0 -> 재시작 버튼 보이기
     if(tryLimit === 0){
         inputBox.classList.add("no-show");
         restartBtn.innerText = `You Lost. Retry it again!`;
@@ -98,6 +99,3 @@ function init (){
 }
 
 init();
-
-//str.indexOf(searchString(검색할 문자 또는 문자열)[, fromIndex])  
-//str.includes('something')); 인수로 전달한 문자열이 포함되어 있는지를 검사하고 결과를 불리언 값으로 반환한다. 두번째 인수는 옵션으로 검색할 위치를 나타내는 정수이다.
